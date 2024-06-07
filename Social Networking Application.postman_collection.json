@@ -1,0 +1,340 @@
+{
+	"info": {
+		"_postman_id": "912651d7-b7f1-4b61-8947-7ee6dc0254de",
+		"name": "Social Networking Application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36182225"
+	},
+	"item": [
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"harish\",\r\n  \"first_name\": \"Harish\",\r\n  \"last_name\": \"Singh\",\r\n  \"email\": \"harish@gmail.com\",\r\n  \"password\": \"Harish@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/apis/auth/signup/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"apis",
+						"auth",
+						"signup",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"harish@gmail.com\",\r\n  \"password\": \"Harish@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/apis/auth/login/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"apis",
+						"auth",
+						"login",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Search",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE5MDg1MjQ0LCJpYXQiOjE3MTc3ODkyNDQsImp0aSI6IjZjZmVjZjYwMDNiNDQzNzU5NjcyOWRhYzY0ODY3NjVmIiwidXNlcl9pZCI6N30.N9b883qluqetuBQxGKLwuhhNe3E2lxFZFk1occ7GGjE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/apis/social/users/?search_keyword=shanu@gmail.com&page=1&page_size=10",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"apis",
+						"social",
+						"users",
+						""
+					],
+					"query": [
+						{
+							"key": "search_keyword",
+							"value": "shanu@gmail.com"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "page_size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send Friend Request",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE5MDg1MjQ0LCJpYXQiOjE3MTc3ODkyNDQsImp0aSI6IjZjZmVjZjYwMDNiNDQzNzU5NjcyOWRhYzY0ODY3NjVmIiwidXNlcl9pZCI6N30.N9b883qluqetuBQxGKLwuhhNe3E2lxFZFk1occ7GGjE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/apis/social/send-requests/?to_user_id=5",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"apis",
+						"social",
+						"send-requests",
+						""
+					],
+					"query": [
+						{
+							"key": "to_user_id",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Friend List",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE5MDg1MjQ0LCJpYXQiOjE3MTc3ODkyNDQsImp0aSI6IjZjZmVjZjYwMDNiNDQzNzU5NjcyOWRhYzY0ODY3NjVmIiwidXNlcl9pZCI6N30.N9b883qluqetuBQxGKLwuhhNe3E2lxFZFk1occ7GGjE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/apis/social/friends/?page=1&page_size=10",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"apis",
+						"social",
+						"friends",
+						""
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "page_size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pending Friend Requests",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE5MDg1MjQ0LCJpYXQiOjE3MTc3ODkyNDQsImp0aSI6IjZjZmVjZjYwMDNiNDQzNzU5NjcyOWRhYzY0ODY3NjVmIiwidXNlcl9pZCI6N30.N9b883qluqetuBQxGKLwuhhNe3E2lxFZFk1occ7GGjE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/apis/social/pending-requests/?page=1&page_size=10",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"apis",
+						"social",
+						"pending-requests",
+						""
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "page_size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accept Friend Request",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE5MDg1MjQ0LCJpYXQiOjE3MTc3ODkyNDQsImp0aSI6IjZjZmVjZjYwMDNiNDQzNzU5NjcyOWRhYzY0ODY3NjVmIiwidXNlcl9pZCI6N30.N9b883qluqetuBQxGKLwuhhNe3E2lxFZFk1occ7GGjE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/apis/social/accept-requests/?friend_request_id=16",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"apis",
+						"social",
+						"accept-requests",
+						""
+					],
+					"query": [
+						{
+							"key": "friend_request_id",
+							"value": "16"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reject Friend Request",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE5MDg1MjQ0LCJpYXQiOjE3MTc3ODkyNDQsImp0aSI6IjZjZmVjZjYwMDNiNDQzNzU5NjcyOWRhYzY0ODY3NjVmIiwidXNlcl9pZCI6N30.N9b883qluqetuBQxGKLwuhhNe3E2lxFZFk1occ7GGjE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/apis/social/reject-requests/?friend_request_id=17",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"apis",
+						"social",
+						"reject-requests",
+						""
+					],
+					"query": [
+						{
+							"key": "friend_request_id",
+							"value": "17"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
