@@ -1,17 +1,5 @@
-from rest_framework import serializers, status
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
-from .models import SocialMediaUser
-from django.contrib.auth import authenticate
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
+from rest_framework import serializers
+from .models import *
 from django.contrib.auth import authenticate
 
 class SocialMediaUserSignupSerializer(serializers.ModelSerializer):
@@ -105,7 +93,7 @@ class LoginSerializer(serializers.Serializer):
         """
         Validate email and password.
         """
-        email = attrs.get('email')
+        email = attrs.get('email').lower()  # Normalize the email to lowercase
         password = attrs.get('password')
 
         if email and password:
@@ -128,3 +116,10 @@ class UserSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = SocialMediaUser
         fields = ['id', 'username','first_name','last_name','email']
+
+class FriendRequestSerializer(serializers.ModelSerializer):
+    from_user = UserSearchSerializer()
+    
+    class Meta:
+        model = FriendRequest
+        fields = ['id', 'from_user']

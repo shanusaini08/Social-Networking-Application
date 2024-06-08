@@ -1,20 +1,17 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework import serializers, status
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
+from datetime import datetime, timedelta
+from rest_framework.permissions import AllowAny ,IsAuthenticated
+from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.views import APIView
 from drf_yasg import openapi
-from rest_framework.permissions import IsAuthenticated
-from drf_yasg.utils import swagger_auto_schema
 from django.db.models import Q
 from .models import *
 from .serializers import *
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
 class SocialMediaUserSignupView(APIView):
@@ -101,8 +98,8 @@ class LoginView(APIView):
                         'responseCode': status.HTTP_200_OK,
                         'responseMessage': 'Login successful.',
                         'responseData': {
-                            'refresh': str(refresh),
                             'access': str(refresh.access_token),
+                            'refresh': str(refresh),
                         }
                     },
                     status=status.HTTP_200_OK
@@ -192,14 +189,6 @@ class UserSearchView(APIView):
             )
 
 
-from datetime import datetime, timedelta
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
-from drf_yasg.utils import swagger_auto_schema
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils import timezone
 class SendFriendRequestView(APIView):
     """
     API endpoint to send a friend request to another user.
@@ -220,7 +209,7 @@ class SendFriendRequestView(APIView):
         }
     )
     def post(self, request):
-        try:
+        # try:
             to_user_id = request.query_params.get('to_user_id')
             try:
                 to_user_id = int(to_user_id)
@@ -259,24 +248,26 @@ class SendFriendRequestView(APIView):
                 return Response(
                     {
                         'responseCode': status.HTTP_400_BAD_REQUEST,
-                        'responseMessage': 'The user has already sent you a friend request. Check your Request List.',
+                        'responseMessage': 'This user has already sent you a friend request. Check your Request List.',
                         'responseData': user_serializer.data
                     },
                     status=status.HTTP_400_BAD_REQUEST
                 )
+            already_friends = FriendRequest.objects.filter(
+                (Q(from_user=request.user) & Q(to_user=to_user) & Q(is_friends=True)) |
+                (Q(from_user=to_user) & Q(to_user=request.user) & Q(is_friends=True))
+            ).first()
 
-            existing_request = FriendRequest.objects.filter(from_user=request.user, to_user=to_user).first()
-            if existing_request and existing_request.status == 'A':
+            if already_friends:
                 print("Check if the friend request has already been accepted")
-                user_serializer = UserSearchSerializer(existing_request.from_user)
                 return Response(
                     {
                         'responseCode': status.HTTP_400_BAD_REQUEST,
                         'responseMessage': 'You both are already friends.',
-                        'responseData': user_serializer.data
                     },
                     status=status.HTTP_400_BAD_REQUEST
                 )
+            existing_request = FriendRequest.objects.filter(from_user=request.user, to_user=to_user).first()
             if existing_request:
                 if existing_request.status == 'R':
                     existing_request.status = 'P'
@@ -330,7 +321,7 @@ class SendFriendRequestView(APIView):
                 status=status.HTTP_200_OK
             )
 
-        except Exception as e:
+        # except Exception as e:
             print("SendFriendRequestView Error -->", e)
             return Response(
                 {
@@ -407,6 +398,7 @@ class AcceptFriendRequestView(APIView):
                 )
 
             friend_request.status = 'A'
+            friend_request.is_friends =True
             friend_request.save()
 
             user_serializer = UserSearchSerializer(friend_request.from_user)
@@ -544,7 +536,7 @@ class FriendListView(APIView):
     def get(self, request):
         try:
             friends = FriendRequest.objects.filter(
-                Q(from_user=request.user, status='A') | Q(to_user=request.user, status='A')
+                Q(from_user=request.user, is_friends=True) | Q(to_user=request.user, is_friends=True)
             ).select_related('from_user', 'to_user')
 
             page_number = request.query_params.get('page')
@@ -594,7 +586,7 @@ class PendingFriendRequestsView(APIView):
             openapi.Parameter('page_size', openapi.IN_QUERY, type=openapi.TYPE_INTEGER, description='Page size', required=False),
         ],
         responses={
-            200: openapi.Response(description='OK', schema=UserSearchSerializer(many=True)),
+            200: openapi.Response(description='OK', schema=FriendRequestSerializer(many=True)),
             400: "Bad Request",
             401: "Unauthorized",
             500: "Internal Server Error",
@@ -616,9 +608,7 @@ class PendingFriendRequestsView(APIView):
             except EmptyPage:
                 page_obj = paginator.page(paginator.num_pages)
 
-            pending_users = [fr.from_user for fr in page_obj]
-
-            serializer = UserSearchSerializer(pending_users, many=True)
+            serializer = FriendRequestSerializer(page_obj, many=True)
 
             return Response(
                 {

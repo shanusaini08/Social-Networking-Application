@@ -32,7 +32,7 @@ class FriendRequest(models.Model):
     to_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_requests', on_delete=models.CASCADE)
     status = models.CharField(max_length=1, choices=FRIEND_REQUEST_STATUS, default='P')
     timestamp = models.DateTimeField(auto_now_add=True)
-
+    is_friends = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.from_user} -> {self.to_user} ({self.get_status_display()})"
 
